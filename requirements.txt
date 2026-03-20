@@ -4,5 +4,12 @@ openai
 python-dotenv
 tqdm
 graphviz
-pygraphviz
-graphviz
+# pygraphviz
+# graphviz
+pydantic
+langchain-core
+langchain-community
+langchain-groq
+arxiv
+wikipedia
+langchain-tavily
