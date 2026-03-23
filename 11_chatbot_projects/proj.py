@@ -91,19 +91,19 @@ graph.add_node("llm", llm_node)
 graph.add_node("tools", tool_node)
 
 # Flow:
-# START → LLM → (tool or end)
+# START -> LLM -> (tool or end)
 graph.add_edge(START, "llm")
 
-# If tool is needed → go to tool node
+# If tool is needed  go to tool node
 graph.add_conditional_edges(
     "llm",
     tools_condition,   # decides if tool is called
 )
 
-# After tool → back to LLM
+# After tool  back to LLM
 graph.add_edge("tools", "llm")
 
-# If no tool → END
+# If no tool  END
 graph.add_edge("llm", END)
 
 
@@ -112,17 +112,23 @@ app = graph.compile()
 
 
 ##### Run #####
-result = app.invoke({
-    "messages": [
-        {"role": "user", "content": "What is AI and latest news about it?"}
-    ]
-})
+
+
+# result = app.invoke({
+#     "messages": [
+#         {"role": "user", "content": "What is AI and latest news about it?"}
+#     ]
+# })
 
 #### Output ####    
-print("\n----- FINAL RESPONSE -----\n")
-for msg in result["messages"]:
-    print(f"{msg.type.upper()}: {msg.content}")
+# print("\n----- FINAL RESPONSE -----\n")
+# for msg in result["messages"]:
+#     print(f"{msg.type.upper()}: {msg.content}")
 
+# STreaming response
+for event in app.stream({"messages" : "hi ,give me the current weather report in kolkata?"}):
+        for msg in event.values():
+            print(msg["messages"][-1].content)
 
 ##########################################################################################################################################
 # #@ langgraph chatbot full script
