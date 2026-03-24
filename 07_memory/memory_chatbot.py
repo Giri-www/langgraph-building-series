@@ -28,7 +28,7 @@ from langchain.tools import tool
 
 # LLM
 from langchain_groq import ChatGroq
-
+from langchain_ollama import ChatOllama
 
 
 #### LOAD API KEYS ####
@@ -83,11 +83,14 @@ tools = [arxiv_tool, wiki_tool, tavily_tool, get_weather]
 
 #### LLM ####
 
-llm = ChatGroq(
-    model="qwen/qwen3-32b",
+# llm = ChatGroq(
+#     model="qwen/qwen3-32b",
+#     temperature=0.2
+# )
+llm = ChatOllama(
+    model="llama3.2:latest",
     temperature=0.2
 )
-
 # Bind tools
 llm_with_tools = llm.bind_tools(tools)
 
@@ -158,9 +161,15 @@ while True:
         print("Goodbye 👋")
         break
 
-    for event in app.stream(
-        {"messages": [{"role": "user", "content": user_input}]},
-        config=config
-    ):
-        for value in event.values():
-            print("Bot:", value["messages"][-1].content)
+    # for event in app.stream(
+    #     {"messages": [{"role": "user", "content": user_input}]},
+    #     config=config
+    # ):
+    #     for value in event.values():
+    #         print("Bot:", value["messages"][-1].content)
+    response = app.invoke(
+    {"messages": [{"role": "user", "content": user_input}]},
+    config=config
+    )
+
+    print("Bot:", response["messages"][-1].content)
